@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+title: "Prosocial Behaviour as Socially Gated Action Selection: A Computational Reframing"
+message: "If you use this code, please cite the accompanying manuscript."
+type: software
+authors:
+  - family-names: Dahl
+    given-names: Christoph D.
+    orcid: "https://orcid.org/0000-0002-4296-1526"
+year: 2026
+license: MIT
+repository-code: "https://github.com/[username]/social-gating-prosocial-behaviour"
