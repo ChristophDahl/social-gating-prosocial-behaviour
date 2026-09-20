@@ -1,9 +1,9 @@
 function render_main_figures_only(projectRoot)
-%RENDER_MAIN_FIGURES_ONLY Render only the two main manuscript figures.
+%RENDER_MAIN_FIGURES_ONLY Render the three main manuscript figures.
 %
-% This script does not rerun the simulation. It only reads existing CSV
-% outputs from <projectRoot>/results and writes figure files to
-% <projectRoot>/figures.
+% This script does not rerun the simulation. It reads existing CSV
+% outputs from <projectRoot>/results and writes the three main manuscript
+% figures to <projectRoot>/figures.
 %
 % Usage:
 %   render_main_figures_only
@@ -21,6 +21,7 @@ end
 
 make_Fig1_helping_need_sensitivity(projectRoot);
 make_Fig2_failure_decomposition(projectRoot);
+make_Fig3_prospective_predictions(projectRoot);
 
 fprintf('\nMain figures rendered to:\n%s\n', fullfile(projectRoot, 'figures'));
 end
