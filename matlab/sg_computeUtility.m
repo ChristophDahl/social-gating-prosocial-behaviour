@@ -1,40 +1,40 @@
-function U = sg_computeUtility(task, p, pNeed, pAfford, cost, competition, relationship, reciprocity, isHelpAction, pNeedForSolicitation)
-%SG_COMPUTEUTILITY Compute action utility for help/action or no-help action.
+function U = sg_computeUtility(task, p, pNeed, pAfford, cost, competition, relationship, reciprocity, isHelpAction, varargin)
+%SG_COMPUTEUTILITY Compute utility for the help/action or no-help action.
 %
-% The actor's self-term is expectedSelfBenefit, not recipient benefit and not
-% realised actualSelfDelta. Cost is subtracted separately. This keeps direct
-% actor benefit, recipient benefit, and joint benefit distinct.
+% Revision for reviewer-2 prospective tests:
+% The implementation is synchronized with the manuscript equation
 %
-% The action-initiation threshold is not global. A larger default helping
-% threshold is used when the action benefits the recipient but offers no
-% direct actor benefit or weighted joint benefit. A smaller actor-benefit
-% threshold is used when the action has direct actor benefit or weighted joint
-% benefit, so mutually beneficial collaboration is not artificially suppressed.
+%   U = wSelf*selfBenefit - wCost*cost - wComp*competition + motorBias
+%       + gate * (wOther + wRel*relationship + wRecip*reciprocity
+%                 + wSol*solicitation) * expectedOtherBenefit
+%       + wJoint*jointBenefit,
 %
-% Optional argument:
-%   pNeedForSolicitation -- value used only in the solicitation term. If this
-%   argument is omitted, the solicitation term uses pNeed. This optional input
-%   allows counterfactual analyses that vary the social gate while holding the
-%   solicitation contribution fixed.
-
-if nargin < 10 || isempty(pNeedForSolicitation)
-    pNeedForSolicitation = pNeed;
-end
+% where gate = pNeed * pAfford.
+%
+% Thus relationship value, reciprocal history, and solicitation modulate the
+% value of the recipient's expected outcome only when need and an effective
+% affordance are represented. They are not independent additive incentives to
+% select the nominal helping action.
+%
+% A trailing legacy argument is accepted and ignored so that older analysis
+% scripts that passed pNeedForSolicitation do not fail.
 
 if isHelpAction
     gate = pNeed * pAfford;
     actionThreshold = localActionThresholdForTask(task, p);
 
-    U = p.wSelf  * task.expectedSelfBenefit + ...
-        p.wOther * gate * task.expectedOtherBenefit + ...
-        p.wJoint * task.jointBenefit + ...
+    socialWeight = p.wOther + ...
         p.wRel   * relationship + ...
         p.wRecip * reciprocity + ...
-        p.wSol   * pNeedForSolicitation * task.solicitation - ...
+        p.wSol   * task.solicitation;
+
+    U = p.wSelf  * task.expectedSelfBenefit - ...
         p.wCost  * cost - ...
-        p.wComp  * competition - ...
-        actionThreshold + ...
-        task.motorBiasHelp;
+        p.wComp  * competition + ...
+        task.motorBiasHelp + ...
+        gate * socialWeight * task.expectedOtherBenefit + ...
+        p.wJoint * task.jointBenefit - ...
+        actionThreshold;
 else
     % Minimal no-help baseline. This can later be expanded to include
     % alternative self-rewards, avoidance, or non-social action values.
