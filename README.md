@@ -1,10 +1,10 @@
-# Prosocial Behaviour as Socially Gated Action Selection
+# Prosocial Behaviour in a Socially Gated Action-Selection Framework
 
 MATLAB code for the simulations, summaries, and figures accompanying the manuscript:
 
-**Prosocial Behaviour as Socially Gated Action Selection: A Computational Reframing of Primate Prosociality**
+**Prosocial Behaviour in a Socially Gated Action-Selection Framework: A Computational Reframing**
 
-The code implements a generative social-gating model in which prosocial behaviour is formalised as action selection under task, relational, and cost constraints. Outcome labels such as instrumental helping, low-cost prosocial choice, costly recipient benefit, strict altruism-like outcome, empathy-like responding, and reliable-partner collaboration are assigned after the simulated action outcome is known.
+The code implements a generative computational framework in which task, informational, relational, cost, and payoff variables contribute to action selection. Outcome labels such as instrumental helping, low-cost prosocial choice, costly recipient benefit, strict altruism-like outcome, empathy-like responding, and reliable-partner collaboration are assigned after the simulated action outcome is known. The architecture is a computational level of description and is not intended to imply a single psychological or neurobiological mechanism.
 
 ## Repository structure
 
@@ -20,6 +20,7 @@ social-gating-prosocial-behaviour/
 │   ├── render_main_figures_only.m
 │   ├── make_Fig1_helping_need_sensitivity.m
 │   ├── make_Fig2_failure_decomposition.m
+│   ├── make_Fig3_prospective_predictions.m
 │   ├── make_FigS1_failure_decomposition_by_system.m
 │   └── sg_*.m
 ├── scripts/
@@ -60,6 +61,10 @@ results/summary_for_manuscript.csv
 results/counterfactual_need_effect.csv
 results/model_ablation_scores.csv
 results/nested_model_likelihoods.csv
+results/prospective_need_affordance.csv
+results/prospective_relationship_gate.csv
+results/prospective_cost_threshold.csv
+results/prospective_prediction_summary.csv
 ```
 
 Expected figure files:
@@ -69,11 +74,23 @@ figures/Fig1.png
 figures/Fig1.pdf
 figures/Fig2.png
 figures/Fig2.pdf
+figures/Fig3_prospective_predictions.png
+figures/Fig3_prospective_predictions.pdf
 figures/supplement/SupFig1.png
 figures/supplement/SupFig1.pdf
 ```
 
 `nested_model_likelihoods.csv` is retained as a legacy output name for compatibility. The same information is reported as `model_ablation_scores.csv` and should be interpreted as a structural model-ablation / predictive-recovery check, not as a fitted empirical nested-model comparison.
+
+## Prospective model-derived diagnostics
+
+`sg_prospectivePredictions.m` evaluates three consequences of the specified architecture in synthetic diagnostic conditions that were not used to construct the literature-derived task presets:
+
+1. a need × affordance interaction implied by the multiplicative gate;
+2. a relationship × gate interaction implied by gating of partner-value effects;
+3. a need-dependent shift in the cost indifference point.
+
+The pure self-interest parameter preset provides a negative control. These analyses are prospective model predictions rather than independent empirical validation.
 
 ## Running components separately
 
@@ -83,7 +100,7 @@ Run the full simulation and default diagnostic plots:
 run('matlab/main_social_gating_simulation.m')
 ```
 
-Render only the two main manuscript figures from existing CSV outputs:
+Render the three main manuscript figures from existing CSV outputs:
 
 ```matlab
 addpath(genpath('matlab'))
