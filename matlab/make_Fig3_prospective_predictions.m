@@ -48,7 +48,7 @@ N = N(N.parameterRegime == regime,:);
 R = R(R.parameterRegime == regime,:);
 C = C(C.parameterRegime == regime,:);
 
-fig = figure('Color','w','Position',[100 100 1100 330],'Renderer','painters');
+fig = figure('Color','w','Position',[100 100 800 300],'Renderer','painters');
 tl = tiledlayout(fig,1,3,'TileSpacing','compact','Padding','compact');
 
 % Panel A: Need x affordance.
@@ -56,31 +56,35 @@ ax1 = nexttile(tl,1); hold(ax1,'on');
 lowAff = N(N.pAfford==0.20,:);
 highAff = N(N.pAfford==0.80,:);
 lowAff = sortrows(lowAff,'pNeed'); highAff = sortrows(highAff,'pNeed');
-plot(ax1,lowAff.pNeed,lowAff.pHelp,'-o','LineWidth',1.4,'MarkerSize',5);
-plot(ax1,highAff.pNeed,highAff.pHelp,'-s','LineWidth',1.4,'MarkerSize',5);
+plot(ax1,lowAff.pNeed,lowAff.pHelp,'-o','LineWidth',1,'MarkerSize',4);
+plot(ax1,highAff.pNeed,highAff.pHelp,'-s','LineWidth',1,'MarkerSize',4);
 xlim(ax1,[0.15 0.85]); ylim(ax1,[0 1]);
 xlabel(ax1,'Inferred need'); ylabel(ax1,'P(recipient-benefiting action)');
 legend(ax1,{'Low affordance','High affordance'},'Location','northwest','Box','off');
 title(ax1,'Need \times affordance','Interpreter','tex');
 text(ax1,-0.16,1.06,'A','Units','normalized','FontWeight','bold');
+axis square
 
 % Panel B: Relationship x gate.
 ax2 = nexttile(tl,2); hold(ax2,'on');
 weak = sortrows(R(R.gateCondition=="weak_gate",:),'relationship');
 strong = sortrows(R(R.gateCondition=="strong_gate",:),'relationship');
-plot(ax2,weak.relationship,weak.pHelp,'-o','LineWidth',1.4,'MarkerSize',5);
-plot(ax2,strong.relationship,strong.pHelp,'-s','LineWidth',1.4,'MarkerSize',5);
+plot(ax2,weak.relationship,weak.pHelp,'-o','LineWidth',1,'MarkerSize',4);
+plot(ax2,strong.relationship,strong.pHelp,'-s','LineWidth',1,'MarkerSize',4);
 xlim(ax2,[-0.05 1.05]); ylim(ax2,[0 1]);
 xlabel(ax2,'Relationship value'); ylabel(ax2,'P(recipient-benefiting action)');
 legend(ax2,{'Weak gate','Strong gate'},'Location','northwest','Box','off');
 title(ax2,'Relationship \times gate','Interpreter','tex');
 text(ax2,-0.16,1.06,'B','Units','normalized','FontWeight','bold');
+axis square
 
 % Panel C: Need-dependent cost threshold.
 ax3 = nexttile(tl,3); hold(ax3,'on');
 C = sortrows(C,'pNeed');
 plot(ax3,C.pNeed,C.costIndifferencePoint,'-o', ...
-    'Color','k','LineWidth',1.4,'MarkerSize',5);
+    'Color','k', ...
+    'LineWidth',1, ...
+    'MarkerSize',4);
 yline(ax3,0,'-','LineWidth',0.75);
 xlim(ax3,[0.25 0.85]);
 ylim(ax3,[min(-0.05,min(C.costIndifferencePoint)-0.05), ...
@@ -88,6 +92,7 @@ ylim(ax3,[min(-0.05,min(C.costIndifferencePoint)-0.05), ...
 xlabel(ax3,'Inferred need'); ylabel(ax3,'Cost at P(action) = 0.5');
 title(ax3,'Need-dependent cost threshold');
 text(ax3,-0.16,1.06,'C','Units','normalized','FontWeight','bold');
+axis square
 
 axs = [ax1 ax2 ax3];
 for ax = axs
